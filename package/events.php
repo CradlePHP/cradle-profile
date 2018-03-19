@@ -184,7 +184,7 @@ $this->on('cradlephp-cradle-profile-redis-populate', function ($request, $respon
 $this->on('cradlephp-cradle-profile-sql-build', function ($request, $response) {
     //load up the database
     $pdo = $this->package('global')->service('sql-main');
-    $database = SqlFactory::i($pdo);
+    $database = SqlFactory::load($pdo);
 
     //setup result counters
     $errors = [];
@@ -283,7 +283,7 @@ $this->on('cradlephp-cradle-profile-sql-build', function ($request, $response) {
 $this->on('cradlephp-cradle-profile-sql-flush', function ($request, $response) {
     //load up the database
     $pdo = $this->package('global')->service('sql-main');
-    $database = SqlFactory::i($pdo);
+    $database = SqlFactory::load($pdo);
 
     //setup result counters
     $errors = [];
@@ -337,7 +337,7 @@ $this->on('cradlephp-cradle-profile-sql-flush', function ($request, $response) {
 $this->on('cradlephp-cradle-profile-sql-populate', function ($request, $response) {
     //load up the database
     $pdo = $this->package('global')->service('sql-main');
-    $database = SqlFactory::i($pdo);
+    $database = SqlFactory::load($pdo);
     //load up the script
     $script = file_get_contents(__DIR__ . '/install/populate.sql');
     //split into queries
@@ -346,6 +346,11 @@ $this->on('cradlephp-cradle-profile-sql-populate', function ($request, $response
     foreach($queries as $query) {
         //trim it
         $query = trim($query);
+
+        if(!$query) {
+            continue;
+        }
+
         //execute the query
         $database->query($query);
     }
