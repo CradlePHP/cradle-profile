@@ -11,7 +11,19 @@
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/create', function ($request, $response) {});
+$this->get('/admin/profile/create', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object create take over
+    $this->routeTo(
+        'get',
+        '/admin/system/object/profile/create',
+        $request,
+        $response
+    );
+});
 
 /**
  * Renders a create form
@@ -19,7 +31,22 @@ $this->get('/admin/profile/create', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/detail/:profile_id', function ($request, $response) {});
+$this->get('/admin/profile/detail/:profile_id', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object detail take over
+    $this->routeTo(
+        'get',
+        sprintf(
+            '/admin/system/object/profile/detail/%s',
+            $request->getStage('profile_id')
+        ),
+        $request,
+        $response
+    );
+});
 
 /**
  * Removes a profile
@@ -27,7 +54,22 @@ $this->get('/admin/profile/detail/:profile_id', function ($request, $response) {
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/remove/:profile_id', function ($request, $response) {});
+$this->get('/admin/profile/remove/:profile_id', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object remove take over
+    $this->routeTo(
+        'get',
+        sprintf(
+            '/admin/system/object/profile/remove/%s',
+            $request->getStage('profile_id')
+        ),
+        $request,
+        $response
+    );
+});
 
 /**
  * Restores a profile
@@ -35,7 +77,22 @@ $this->get('/admin/profile/remove/:profile_id', function ($request, $response) {
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/restore/:profile_id', function ($request, $response) {});
+$this->get('/admin/profile/restore/:profile_id', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object restore take over
+    $this->routeTo(
+        'get',
+        sprintf(
+            '/admin/system/object/profile/restore/%s',
+            $request->getStage('profile_id')
+        ),
+        $request,
+        $response
+    );
+});
 
 /**
  * Renders a search page
@@ -43,7 +100,19 @@ $this->get('/admin/profile/restore/:profile_id', function ($request, $response) 
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/search', function ($request, $response) {});
+$this->get('/admin/profile/search', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object search take over
+    $this->routeTo(
+        'get',
+        '/admin/system/object/profile/search',
+        $request,
+        $response
+    );
+});
 
 /**
  * Renders an update form
@@ -51,7 +120,22 @@ $this->get('/admin/profile/search', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->get('/admin/profile/update/:profile_id', function ($request, $response) {});
+$this->get('/admin/profile/update/:profile_id', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object update take over
+    $this->routeTo(
+        'get',
+        sprintf(
+            '/admin/system/object/profile/update/%s',
+            $request->getStage('profile_id')
+        ),
+        $request,
+        $response
+    );
+});
 
 /**
  * Processes a create form
@@ -59,7 +143,19 @@ $this->get('/admin/profile/update/:profile_id', function ($request, $response) {
  * @param Request $request
  * @param Response $response
  */
-$this->post('/admin/profile/create', function ($request, $response) {});
+$this->post('/admin/profile/create', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the object post create take over
+    $this->routeTo(
+        'post',
+        '/admin/system/object/profile/create',
+        $request,
+        $response
+    );
+});
 
 /**
  * Processes an update form
@@ -67,6 +163,20 @@ $this->post('/admin/profile/create', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->post('/admin/profile/update/:profile_id', function ($request, $response) {});
+$this->post('/admin/profile/update/:profile_id', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
 
+    //now let the object post update take over
+    $this->routeTo(
+        'post',
+        sprintf(
+            '/admin/system/object/profile/update/%s',
+            $request->getStage('profile_id')
+        ),
+        $request,
+        $response
+    );
+});
 // Front End Controllers

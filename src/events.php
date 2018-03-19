@@ -9,7 +9,13 @@
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-create', function ($request, $response) {});
+$this->on('profile-create', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object create
+    $this->trigger('system-object-create', $request, $response);
+});
 
 /**
  * Creates a profile
@@ -17,7 +23,13 @@ $this->on('profile-create', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-detail', function ($request, $response) {});
+$this->on('profile-detail', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object detail
+    $this->trigger('system-object-detail', $request, $response);
+});
 
 /**
  * Removes a profile
@@ -25,7 +37,13 @@ $this->on('profile-detail', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-remove', function ($request, $response) {});
+$this->on('profile-remove', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object remove
+    $this->trigger('system-object-remove', $request, $response);
+});
 
 /**
  * Restores a profile
@@ -33,7 +51,13 @@ $this->on('profile-remove', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-restore', function ($request, $response) {});
+$this->on('profile-restore', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object restore
+    $this->trigger('system-object-restore', $request, $response);
+});
 
 /**
  * Searches profile
@@ -41,7 +65,13 @@ $this->on('profile-restore', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-search', function ($request, $response) {});
+$this->on('profile-search', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object search
+    $this->trigger('system-object-search', $request, $response);
+});
 
 /**
  * Updates a profile
@@ -49,4 +79,10 @@ $this->on('profile-search', function ($request, $response) {});
  * @param Request $request
  * @param Response $response
  */
-$this->on('profile-update', function ($request, $response) {});
+$this->on('profile-update', function ($request, $response) {
+    //set profile as schema
+    $request->setStage('schema', 'profile');
+
+    //trigger object update
+    $this->trigger('system-object-update', $request, $response);
+});
