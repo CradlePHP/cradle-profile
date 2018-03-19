@@ -8,6 +8,9 @@ use Cradle\Storm\SqlFactory;
 use Cradle\Package\System\Schema;
 use Cradle\Package\System\Exception;
 
+use Cradle\Http\Request;
+use Cradle\Http\Response;
+
 /**
  * $ cradle package install cradlephp/cradle-profile
  * $ cradle package install cradlephp/cradle-profile 1.0.0
