@@ -138,7 +138,14 @@ $this->on('cradlephp-cradle-profile-remove', function ($request, $response) {
  * @param Request $request
  * @param Response $response
  */
-$this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $response) {});
+$this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $response) {
+    // set parameters
+    $request->setStage('name', 'profile');
+    // trigger global schema flush
+    $this->trigger('system-schema-flush-elastic', $request, $response);
+    // set response
+    $response->setResults('schema', 'profile');
+});
 
 /**
  * $ cradle elastic map cradlephp/cradle-profile
@@ -147,7 +154,14 @@ $this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $respons
  * @param Request $request
  * @param Response $response
  */
-$this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response) {});
+$this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response) {
+    // set parameters
+    $request->setStage('name', 'profile');
+    // trigger global schema flush
+    $this->trigger('system-schema-map-elastic', $request, $response);
+    // set response
+    $response->setResults('schema', 'profile');
+});
 
 /**
  * $ cradle elastic populate cradlephp/cradle-profile
@@ -156,7 +170,14 @@ $this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response)
  * @param Request $request
  * @param Response $response
  */
-$this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $response) {});
+$this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $response) {
+    // set parameters
+    $request->setStage('name', 'profile');
+    // trigger global schema flush
+    $this->trigger('system-schema-populate-elastic', $request, $response);
+    // set response
+    $response->setResults('schema', 'profile');
+});
 
 /**
  * $ cradle redis flush cradlephp/cradle-profile
@@ -165,7 +186,17 @@ $this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $resp
  * @param Request $request
  * @param Response $response
  */
-$this->on('cradlephp-cradle-profile-redis-flush', function ($request, $response) {});
+$this->on('cradlephp-cradle-profile-redis-flush', function ($request, $response) {
+    // initialize schema
+    $schema = Schema::i('profile');
+    // get redis service
+    $redis = $schema->object()->service('redis');
+    // remove cached search and detail from redis
+    $redis->removeSearch();
+    $redis->removeDetail();
+    
+    $response->setResults('schema', 'profile');
+});
 
 /**
  * $ cradle redis populate cradlephp/cradle-profile
@@ -174,7 +205,38 @@ $this->on('cradlephp-cradle-profile-redis-flush', function ($request, $response)
  * @param Request $request
  * @param Response $response
  */
-$this->on('cradlephp-cradle-profile-redis-populate', function ($request, $response) {});
+$this->on('cradlephp-cradle-profile-redis-populate', function ($request, $response) {
+    // initialize schema
+    $schema = Schema::i('profile');
+    // get sql service
+    $sql = $schema->object()->service('sql');
+    $redis = $schema->object()->service('redis');
+    // get sql data
+    $data = $sql->search();
+    // if there is no results
+    if (!isset($data['total']) && $data['total'] < 1) {
+        // do not proceed
+        return $response->setResults('schema', 'profile');
+    }
+
+    // get slugable fields
+    $slugs = $schema->getSlugableFieldNames($schema->getPrimaryFieldName());
+    // loop through rows
+    foreach ($data['rows'] as $entry) {
+        // loop thru slugs
+        foreach ($slugs as $slug) {
+            // if entry found
+            if (isset($entry[$slug])) {
+                // create cache data on redis
+                $redis->createDetail($slug . '-' . $entry[$slug], $entry);
+            }
+        }
+        
+    }
+
+    $response->setResults('schema', 'profile');
+    
+});
 
 /**
  * $ cradle sql build cradlephp/cradle-profile
