@@ -85,5 +85,12 @@ return [
         ]
     ],
     'relations' => [],
-    'suggestion' => '{{profile_name}}'
+    'suggestion' => '{{profile_name}}',
+    'fixtures' => [
+        [
+            'profile_name' => 'John Doe',
+            'profile_created' => date('Y-m-d H:i:s'),
+            'profile_updated' => date('Y-m-d H:i:s'),
+        ]
+    ]
 ];

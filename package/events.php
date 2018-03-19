@@ -335,23 +335,33 @@ $this->on('cradlephp-cradle-profile-sql-flush', function ($request, $response) {
  * @param Response $response
  */
 $this->on('cradlephp-cradle-profile-sql-populate', function ($request, $response) {
-    //load up the database
-    $pdo = $this->package('global')->service('sql-main');
-    $database = SqlFactory::load($pdo);
-    //load up the script
-    $script = file_get_contents(__DIR__ . '/install/populate.sql');
-    //split into queries
-    $queries = explode(';', $script);
-    //loop through queries
-    foreach($queries as $query) {
-        //trim it
-        $query = trim($query);
-
-        if(!$query) {
+    //scan through each file
+    foreach (scandir(__DIR__ . '/schema') as $file) {
+        //if it's not a php file
+        if(substr($file, -4) !== '.php') {
+            //skip
             continue;
         }
 
-        //execute the query
-        $database->query($query);
+        //get the schema data
+        $data = include sprintf('%s/schema/%s', __DIR__, $file);
+
+        //if no name
+        if (!isset($data['name'], $data['fixtures'])
+            || !is_array($data['fixtures'])
+        ) {
+            //skip
+            continue;
+        }
+
+        $actionRequest = Request::i()->load();
+        $actionResponse = Response::i()->load();
+        foreach($data['fixtures'] as  $fixture) {
+            $actionRequest
+                ->setStage($fixture)
+                ->setStage('schema', 'profile');
+
+            $this->trigger('system-object-create', $actionRequest, $actionResponse);
+        }
     }
 });
