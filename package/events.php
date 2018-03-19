@@ -67,7 +67,6 @@ $this->on('cradlephp-cradle-profile-update', function ($request, $response) {
     }
 
     // update package
-    // install package
     $version = $this->package('cradlephp/cradle-profile')->install($current);
 
     // update the config
@@ -224,7 +223,7 @@ $this->on('cradlephp-cradle-profile-sql-build', function ($request, $response) {
 
         //now build it back up
         //set the data
-        $request->setStage($data);
+        $request->setStage($schema->get());
 
         //----------------------------//
         // 1. Prepare Data
@@ -270,7 +269,7 @@ $this->on('cradlephp-cradle-profile-sql-build', function ($request, $response) {
         $response->set('json', 'validation', $errors);
     }
 
-    $response->setResults('schemas', $processed);
+    $response->setResults(['schemas' => $processed]);
 });
 
 /**
