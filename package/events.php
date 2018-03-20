@@ -25,7 +25,7 @@ $this->on('cradlephp-cradle-profile-install', function ($request, $response) {
     $name = 'cradlephp/cradle-profile';
 
     //if it's already installed
-    if ($this->package('global')->config('version', $name)) {
+    if ($this->package('global')->config('packages', $name)) {
         $message = sprintf('%s is already installed', $name);
         return $response->setError(true, $message);
     }
@@ -34,7 +34,11 @@ $this->on('cradlephp-cradle-profile-install', function ($request, $response) {
     $version = $this->package('cradlephp/cradle-profile')->install('0.0.0');
 
     // update the config
-    $this->package('global')->config('version', $name, $version);
+    $this->package('global')->config('packages', $name, [
+        'version' => $version,
+        'active' => true
+    ]);
+
     $response->setResults('version', $version);
 });
 
@@ -52,7 +56,15 @@ $this->on('cradlephp-cradle-profile-update', function ($request, $response) {
     $name = 'cradlephp/cradle-profile';
 
     //get the current version
-    $current = $this->package('global')->config('version', $name);
+    $current = $this->package('global')->config('packages', $name);
+
+    // if version is set
+    if (is_array($current) && isset($current['version'])) {
+        // get the current version
+        $current = $current['version'];
+    } else {
+        $current = null;
+    }
 
     //if it's not installed
     if (!$current) {
@@ -73,7 +85,11 @@ $this->on('cradlephp-cradle-profile-update', function ($request, $response) {
     $version = $this->package('cradlephp/cradle-profile')->install($current);
 
     // update the config
-    $this->package('global')->config('versions', $name, $version);
+    $this->package('global')->config('packages', $name, [
+        'version' => $version,
+        'active' => true
+    ]);
+
     $response->setResults('version', $version);
 });
 
@@ -85,8 +101,20 @@ $this->on('cradlephp-cradle-profile-update', function ($request, $response) {
  * @param Response $response
  */
 $this->on('cradlephp-cradle-profile-remove', function ($request, $response) {
+    //custom name of this package
+    $name = 'cradlephp/cradle-profile';
+
+    // if it's not installed
+    if (!$this->package('global')->config('packages', $name)) {
+        $message = sprintf('%s is not installed', $name);
+        return $response->setError(true, $message);
+    }
+
     //setup result counters
     $errors = [];
+
+    // processed data
+    $processed = [];
 
     //scan through each file
     foreach (scandir(__DIR__ . '/schema') as $file) {
@@ -127,6 +155,17 @@ $this->on('cradlephp-cradle-profile-remove', function ($request, $response) {
     if (!empty($errors)) {
         $response->set('json', 'validation', $errors);
     }
+
+    // get package config
+    $packages = $this->package('global')->config('packages');
+
+    // remove package from config
+    if (isset($packages[$name])) {
+        unset($packages[$name]);
+    }
+
+    // update package config
+    $this->package('global')->config('packages', $packages);
 
     $response->setResults('schemas', $processed);
 });
