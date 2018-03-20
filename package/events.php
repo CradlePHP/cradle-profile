@@ -139,12 +139,45 @@ $this->on('cradlephp-cradle-profile-remove', function ($request, $response) {
  * @param Response $response
  */
 $this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $response) {
-    // set parameters
-    $request->setStage('name', 'profile');
-    // trigger global schema flush
-    $this->trigger('system-schema-flush-elastic', $request, $response);
+    $processed = $errors = [];
+    //scan through each file
+    foreach (scandir(__DIR__ . '/schema') as $file) {
+        //if it's not a php file
+        if(substr($file, -4) !== '.php') {
+            //skip
+            continue;
+        }
+
+        //get the schema data
+        $data = include sprintf('%s/schema/%s', __DIR__, $file);
+
+        // if name is not set
+        if (!isset ($data['name'])) {
+            // skip
+            continue;
+        }
+        
+        // set parameters
+        $request->setStage('name', $data['name']);
+        // trigger global schema flush
+        $this->trigger('system-schema-flush-elastic', $request, $response);
+        // intercept error
+        if ($response->isError()) {
+            //collect all the errors
+            $errors[$data['name']] = $response->getMessage();
+            continue;
+        }
+
+        
+        $processed[] = $data['name'];
+    }
+    
+    if (!empty($errors)) {
+        $response->set('json', 'validation', $errors);
+    }
+
     // set response
-    $response->setResults('schema', 'profile');
+    $response->setResults('schema', $processed);
 });
 
 /**
@@ -155,12 +188,44 @@ $this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $respons
  * @param Response $response
  */
 $this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response) {
-    // set parameters
-    $request->setStage('name', 'profile');
-    // trigger global schema flush
-    $this->trigger('system-schema-map-elastic', $request, $response);
-    // set response
-    $response->setResults('schema', 'profile');
+    $processed = $errors = [];
+    //scan through each file
+    foreach (scandir(__DIR__ . '/schema') as $file) {
+        //if it's not a php file
+        if(substr($file, -4) !== '.php') {
+            //skip
+            continue;
+        }
+
+        //get the schema data
+        $data = include sprintf('%s/schema/%s', __DIR__, $file);
+        // if name is not set
+        if (!isset ($data['name'])) {
+            // skip
+            continue;
+        }
+        
+        // set parameters
+        $request->setStage('name', $data['name']);
+        // trigger global schema flush
+        $this->trigger('system-schema-map-elastic', $request, $response);
+        
+        // intercept error
+        if ($response->isError()) {
+            //collect all the errors
+            $errors[$data['name']] = $response->getMessage();
+            continue;
+        }
+
+        $processed[] = $data['name'];
+    }
+
+    // set response error
+    if (!empty ($errors)) {
+        $response->set('json', 'validation', $errors);
+    }
+    
+    $response->setResults('schema', $processed);
 });
 
 /**
@@ -171,10 +236,42 @@ $this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response)
  * @param Response $response
  */
 $this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $response) {
-    // set parameters
-    $request->setStage('name', 'profile');
-    // trigger global schema flush
-    $this->trigger('system-schema-populate-elastic', $request, $response);
+    $processed = $errors = [];
+    //scan through each file
+    foreach (scandir(__DIR__ . '/schema') as $file) {
+        //if it's not a php file
+        if(substr($file, -4) !== '.php') {
+            //skip
+            continue;
+        }
+
+        //get the schema data
+        $data = include sprintf('%s/schema/%s', __DIR__, $file);
+        // if name is not set
+        if (!isset ($data['name'])) {
+            // skip
+            continue;
+        }
+        
+        // set parameters
+        $request->setStage('name', $data['name']);
+        // trigger global schema flush
+        $this->trigger('system-schema-populate-elastic', $request, $response);
+        // intercept error
+        if ($response->isError()) {
+            $errors[$data['name']] = $response->getMessage();
+            continue;
+        }
+
+        $processed[] = $data['name'];
+        
+    }
+
+    // set response error
+    if (!empty($errors)) {
+        $response->set('json', 'validation', $errors);
+    }
+    
     // set response
     $response->setResults('schema', 'profile');
 });
