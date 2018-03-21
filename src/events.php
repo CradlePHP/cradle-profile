@@ -13,8 +13,8 @@ $this->on('profile-create', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object create
-    $this->trigger('system-object-create', $request, $response);
+    //trigger model create
+    $this->trigger('system-model-create', $request, $response);
 });
 
 /**
@@ -27,8 +27,8 @@ $this->on('profile-detail', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object detail
-    $this->trigger('system-object-detail', $request, $response);
+    //trigger model detail
+    $this->trigger('system-model-detail', $request, $response);
 });
 
 /**
@@ -41,8 +41,8 @@ $this->on('profile-remove', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object remove
-    $this->trigger('system-object-remove', $request, $response);
+    //trigger model remove
+    $this->trigger('system-model-remove', $request, $response);
 });
 
 /**
@@ -55,8 +55,8 @@ $this->on('profile-restore', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object restore
-    $this->trigger('system-object-restore', $request, $response);
+    //trigger model restore
+    $this->trigger('system-model-restore', $request, $response);
 });
 
 /**
@@ -69,8 +69,8 @@ $this->on('profile-search', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object search
-    $this->trigger('system-object-search', $request, $response);
+    //trigger model search
+    $this->trigger('system-model-search', $request, $response);
 });
 
 /**
@@ -83,6 +83,6 @@ $this->on('profile-update', function ($request, $response) {
     //set profile as schema
     $request->setStage('schema', 'profile');
 
-    //trigger object update
-    $this->trigger('system-object-update', $request, $response);
+    //trigger model update
+    $this->trigger('system-model-update', $request, $response);
 });

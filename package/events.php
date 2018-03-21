@@ -326,7 +326,7 @@ $this->on('cradlephp-cradle-profile-redis-flush', function ($request, $response)
     // initialize schema
     $schema = Schema::i('profile');
     // get redis service
-    $redis = $schema->object()->service('redis');
+    $redis = $schema->model()->service('redis');
     // remove cached search and detail from redis
     $redis->removeSearch();
     $redis->removeDetail();
@@ -345,8 +345,8 @@ $this->on('cradlephp-cradle-profile-redis-populate', function ($request, $respon
     // initialize schema
     $schema = Schema::i('profile');
     // get sql service
-    $sql = $schema->object()->service('sql');
-    $redis = $schema->object()->service('redis');
+    $sql = $schema->model()->service('sql');
+    $redis = $schema->model()->service('redis');
     // get sql data
     $data = $sql->search();
     // if there is no results
@@ -561,7 +561,7 @@ $this->on('cradlephp-cradle-profile-sql-populate', function ($request, $response
                 ->setStage($fixture)
                 ->setStage('schema', 'profile');
 
-            $this->trigger('system-object-create', $actionRequest, $actionResponse);
+            $this->trigger('system-model-create', $actionRequest, $actionResponse);
         }
     }
 });

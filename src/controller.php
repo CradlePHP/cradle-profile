@@ -19,7 +19,7 @@ $this->get('/admin/profile/create', function ($request, $response) {
     //now let the object create take over
     $this->routeTo(
         'get',
-        '/admin/system/object/profile/create',
+        '/admin/system/model/profile/create',
         $request,
         $response
     );
@@ -40,7 +40,7 @@ $this->get('/admin/profile/detail/:profile_id', function ($request, $response) {
     $this->routeTo(
         'get',
         sprintf(
-            '/admin/system/object/profile/detail/%s',
+            '/admin/system/model/profile/detail/%s',
             $request->getStage('profile_id')
         ),
         $request,
@@ -63,7 +63,7 @@ $this->get('/admin/profile/remove/:profile_id', function ($request, $response) {
     $this->routeTo(
         'get',
         sprintf(
-            '/admin/system/object/profile/remove/%s',
+            '/admin/system/model/profile/remove/%s',
             $request->getStage('profile_id')
         ),
         $request,
@@ -86,7 +86,7 @@ $this->get('/admin/profile/restore/:profile_id', function ($request, $response) 
     $this->routeTo(
         'get',
         sprintf(
-            '/admin/system/object/profile/restore/%s',
+            '/admin/system/model/profile/restore/%s',
             $request->getStage('profile_id')
         ),
         $request,
@@ -108,7 +108,7 @@ $this->get('/admin/profile/search', function ($request, $response) {
     //now let the object search take over
     $this->routeTo(
         'get',
-        '/admin/system/object/profile/search',
+        '/admin/system/model/profile/search',
         $request,
         $response
     );
@@ -129,7 +129,7 @@ $this->get('/admin/profile/update/:profile_id', function ($request, $response) {
     $this->routeTo(
         'get',
         sprintf(
-            '/admin/system/object/profile/update/%s',
+            '/admin/system/model/profile/update/%s',
             $request->getStage('profile_id')
         ),
         $request,
@@ -151,7 +151,7 @@ $this->post('/admin/profile/create', function ($request, $response) {
     //now let the object post create take over
     $this->routeTo(
         'post',
-        '/admin/system/object/profile/create',
+        '/admin/system/model/profile/create',
         $request,
         $response
     );
@@ -172,7 +172,7 @@ $this->post('/admin/profile/update/:profile_id', function ($request, $response) 
     $this->routeTo(
         'post',
         sprintf(
-            '/admin/system/object/profile/update/%s',
+            '/admin/system/model/profile/update/%s',
             $request->getStage('profile_id')
         ),
         $request,
