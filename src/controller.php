@@ -138,6 +138,29 @@ $this->get('/admin/profile/update/:profile_id', function ($request, $response) {
 });
 
 /**
+ * Process data export
+ *
+ * @param Request $request
+ * @param Response $response
+ */
+$this->get('/admin/profile/export/:type', function ($request, $response) {
+    //----------------------------//
+    //set redirect
+    $request->setStage('redirect_uri', '/admin/profile/search');
+
+    //now let the model update take over
+    $this->routeTo(
+        'get',
+        sprintf(
+            '/admin/system/model/profile/export/%s',
+            $request->getStage('type')
+        ),
+        $request,
+        $response
+    );
+});
+
+/**
  * Processes a create form
  *
  * @param Request $request
