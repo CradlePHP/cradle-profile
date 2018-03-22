@@ -5,6 +5,12 @@
 require_once __DIR__ . '/package/events.php';
 require_once __DIR__ . '/src/events.php';
 require_once __DIR__ . '/src/controller.php';
+require_once __DIR__ . '/package/helpers.php';
 
-//bootstrap
-$this->preprocess(include __DIR__ . '/package/helpers.php');
+// NOTE: Do not use preprocessors because
+// preprocessors are only called once
+// command-line bootstrap.
+
+// Since it is assumed that the preprocessors
+// is already loaded when the time it gets to the
+// file, the global package is already available.
