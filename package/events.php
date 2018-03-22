@@ -24,8 +24,19 @@ $this->on('cradlephp-cradle-profile-install', function ($request, $response) {
     //custom name of this package
     $name = 'cradlephp/cradle-profile';
 
+    //get the current version
+    $current = $this->package('global')->config('packages', $name);
+
+    // if version is set
+    if (is_array($current) && isset($current['version'])) {
+        // get the current version
+        $current = $current['version'];
+    } else {
+        $current = null;
+    }
+
     //if it's already installed
-    if ($this->package('global')->config('packages', $name)) {
+    if ($current) {
         $message = sprintf('%s is already installed', $name);
         return $response->setError(true, $message);
     }
