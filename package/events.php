@@ -206,7 +206,7 @@ $this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $respons
             // skip
             continue;
         }
-        
+
         // set parameters
         $request->setStage('name', $data['name']);
         // trigger global schema flush
@@ -218,10 +218,10 @@ $this->on('cradlephp-cradle-profile-elastic-flush', function ($request, $respons
             continue;
         }
 
-        
+
         $processed[] = $data['name'];
     }
-    
+
     if (!empty($errors)) {
         $response->set('json', 'validation', $errors);
     }
@@ -254,12 +254,12 @@ $this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response)
             // skip
             continue;
         }
-        
+
         // set parameters
         $request->setStage('name', $data['name']);
         // trigger global schema flush
         $this->trigger('system-schema-map-elastic', $request, $response);
-        
+
         // intercept error
         if ($response->isError()) {
             //collect all the errors
@@ -274,7 +274,7 @@ $this->on('cradlephp-cradle-profile-elastic-map', function ($request, $response)
     if (!empty ($errors)) {
         $response->set('json', 'validation', $errors);
     }
-    
+
     $response->setResults('schema', $processed);
 });
 
@@ -302,7 +302,7 @@ $this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $resp
             // skip
             continue;
         }
-        
+
         // set parameters
         $request->setStage('name', $data['name']);
         // trigger global schema flush
@@ -314,14 +314,14 @@ $this->on('cradlephp-cradle-profile-elastic-populate', function ($request, $resp
         }
 
         $processed[] = $data['name'];
-        
+
     }
 
     // set response error
     if (!empty($errors)) {
         $response->set('json', 'validation', $errors);
     }
-    
+
     // set response
     $response->setResults('schema', 'profile');
 });
@@ -341,7 +341,7 @@ $this->on('cradlephp-cradle-profile-redis-flush', function ($request, $response)
     // remove cached search and detail from redis
     $redis->removeSearch();
     $redis->removeDetail();
-    
+
     $response->setResults('schema', 'profile');
 });
 
@@ -378,11 +378,11 @@ $this->on('cradlephp-cradle-profile-redis-populate', function ($request, $respon
                 $redis->createDetail($slug . '-' . $entry[$slug], $entry);
             }
         }
-        
+
     }
 
     $response->setResults('schema', 'profile');
-    
+
 });
 
 /**
@@ -565,14 +565,18 @@ $this->on('cradlephp-cradle-profile-sql-populate', function ($request, $response
             continue;
         }
 
-        $actionRequest = Request::i()->load();
-        $actionResponse = Response::i()->load();
+        $payload = $this->makePayload();
+
         foreach($data['fixtures'] as  $fixture) {
-            $actionRequest
+            $payload['request']
                 ->setStage($fixture)
                 ->setStage('schema', 'profile');
 
-            $this->trigger('system-model-create', $actionRequest, $actionResponse);
+            $this->trigger(
+                'system-model-create',
+                $payload['request'],
+                $payload['response']
+            );
         }
     }
 });
