@@ -4,8 +4,13 @@ Cradle Profile handles everything about the profile. It is based on CradlePHP/cr
 
 ## Install
 
+If you already installed Cradle, you may not need to install this because it
+should be already included.
+
 ```
-composer install cradlephp/cradle-profile
+$ composer require cradlephp/cradle-profile
+$ bin/cradle cradlephp/cradle-profile install
+$ bin/cradle cradlephp/cradle-profile sql-populate
 ```
 
 ----
