@@ -4,6 +4,7 @@ return [
     'singular' => 'Profile',
     'plural' => 'Profiles',
     'name' => 'profile',
+    'group' => 'Users',
     'icon' => 'fas fa-user',
     'detail' => 'Generic user profiles designed to separate public data from sensitive data like passwords. Best used with auth tables.',
     'fields' => [
